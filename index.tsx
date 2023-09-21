@@ -11,6 +11,7 @@ let React = {
       children,
     };
   
+    console.log(element)
     return element;
   },
 };
@@ -25,8 +26,26 @@ const App = () => (
 
 render(<App />, document.getElementById("root"));
 
+
+
+
 function render(reactElement, container) {
-    const domElement = document.createElement(reactElement.tag);
-    
+
+    if(typeof reactElement === "string" || typeof reactElement === "number") {
+        const textNode = document.createTextNode(String(reactElement))
+        container.appendChild(textNode)
+    }
+
+    if(typeof reactElement === "object"){
+        const domElement = document.createElement(reactElement.tag);
+
+        reactElement.children.forEach(child => {
+            render(child, domElement)
+        })
+
+        container.appendChild(domElement)
+            
+    }
+
 }
 
