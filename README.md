@@ -1,4 +1,10 @@
 # likereact
 
+**Install all the packages**
+```
 npm install
-npm parcel index.tsx
+```
+**Run it on localhost**
+```
+npx parcel index.tsx
+```
