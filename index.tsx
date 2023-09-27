@@ -10,42 +10,45 @@ let React = {
       props,
       children,
     };
-  
-    console.log(element)
+
+    console.log(element);
     return element;
   },
 };
 
-
 const App = () => (
-  <div className="title-div">
-    <h1>Hello</h1>
+  <div>
+  
+    <h1 className="hello">
+      Hello
+    </h1>
+    <input type="text" placeholder="enter ur name"/>
     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. </p>
   </div>
 );
 
-render(<App />, document.getElementById("root"));
-
-
-
-
 function render(reactElement, container) {
+  if (typeof reactElement === "string" || typeof reactElement === "number") {
+    const textNode = document.createTextNode(String(reactElement));
+    container.appendChild(textNode);
+  }
 
-    if(typeof reactElement === "string" || typeof reactElement === "number") {
-        const textNode = document.createTextNode(String(reactElement))
-        container.appendChild(textNode)
+  if (typeof reactElement === "object") {
+    const domElement = document.createElement(reactElement.tag);
+
+    if (reactElement.props) {
+      Object.keys(reactElement.props).forEach((propName) => {
+        domElement[propName] = reactElement.props[propName];
+      });
     }
 
-    if(typeof reactElement === "object"){
-        const domElement = document.createElement(reactElement.tag);
+    reactElement.children.forEach((child) => {
+      render(child, domElement);
+    });
 
-        reactElement.children.forEach(child => {
-            render(child, domElement)
-        })
-
-        container.appendChild(domElement)
-            
-    }
-
+    container.appendChild(domElement);
+  }
 }
 
+render(<App />, document.getElementById("root"));
+console.log(document.getElementsByTagName("h1"));
