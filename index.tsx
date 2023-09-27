@@ -1,4 +1,9 @@
 // childrens are undefined because createElement is a recursive function and it will call itself until it reaches the base case and the basecase must return something.
+
+
+let state;
+
+
 let React = {
   createElement: (tag, props, ...children) => {
     if (typeof tag === "function") {
@@ -11,21 +16,43 @@ let React = {
       children,
     };
 
-    console.log(element);
     return element;
+  },
+
+  
+
+  useState: (initialValue) => {
+    state = state || initialValue;
+    
+   
+    const setState = (newValue) => {
+      state = newValue;
+      console.log(state)
+      rerender();
+      
+    };
+   
+    console.log(state)
+    return [state, setState];
   },
 };
 
-const App = () => (
-  <div>
-  
-    <h1 className="hello">
-      Hello
-    </h1>
-    <input type="text" placeholder="enter ur name"/>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. </p>
-  </div>
-);
+const App = () => {
+  const [name, setName] = React.useState("John");
+
+  return (
+    <div>
+      <h1 className="hello">Hello, {name}</h1>
+      <input
+        value={name}
+        type="text"
+        placeholder="enter ur name"
+        onchange={(e) => setName(e.target.value)}
+      />
+      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. </p>
+    </div>
+  );
+};
 
 function render(reactElement, container) {
   if (typeof reactElement === "string" || typeof reactElement === "number") {
@@ -51,4 +78,8 @@ function render(reactElement, container) {
 }
 
 render(<App />, document.getElementById("root"));
-console.log(document.getElementsByTagName("h1"));
+
+const rerender = () => {
+  document.getElementById("root").innerHTML = "";
+  render(<App />, document.getElementById("root"));
+};
